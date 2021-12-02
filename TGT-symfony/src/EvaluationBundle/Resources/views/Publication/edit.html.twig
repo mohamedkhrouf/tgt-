@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    {{ form_start(edit_form) }}
+    {{ for_widget(edit_form.video)|escape('url') }}
+    {{ form_end(edit_form) }}
+{% endblock %}

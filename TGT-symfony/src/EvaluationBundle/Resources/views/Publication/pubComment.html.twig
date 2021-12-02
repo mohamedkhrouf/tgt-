@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="col-sm-8 single-left">
+    <div class="main-grids news-main-grids">
+        <div class="recommended-info">
+            <h3>{{pub.author}}</h3>
+            <video id="example_video_1" class="video-js vjs-default-skin" controls preload="auto" width="640" height="264" poster="http://video-js.zencoder.com/oceans-clip.png" data-setup='{"example_option":true}'>
+                <source src="{{'file:///'~pub.video}}" type='video/mp4'>
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a web browser that
+                    <a href="http://videojs.com/html5-video-support/" target="_blank">
+                        supports HTML5 video
+                    </a>
+                </p>
+            </video>
+            <div class="published">
+                <script src="{{ asset('jquery.min.js')}}"></script>
+                <script>
+                    $(document).ready(function () {
+                        size_li = $("#myList li").size();
+                        x=1;
+                        $('#myList li:lt('+x+')').show();
+                        $('#loadMore').click(function () {
+                            x= (x+1 <= size_li) ? x+1 : size_li;
+                            $('#myList li:lt('+x+')').show();
+                        });
+                        $('#showLess').click(function () {
+                            x=(x-1<0) ? 1 : x-1;
+                            $('#myList li').not(':lt('+x+')').hide();
+                        });
+                    });
+                </script>
+                <div class="load_more">
+                    <ul id="myList">
+                        <li style="display: list-item;">
+                            <h4>Publié le {{ pub.updatedAt|date('d-m-Y H:i:s') }}</h4>
+                            <h5>Catégorie | {{ pub.categorie }}</h5>
+                            <h5>Nombre de Vote | {{ pub.nbrVote }}</h5>
+                            <p>
+                                {{ pub.description }}
+                            </p>
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                <a href="{{ path("publication_vote",{'id':pub.id})}}" style="text-decoration:none"><input type="button" value="Voter"> </a>
+
+                                <a href="#" style="text-decoration:none"><input type="button" value="Buzzer"></a>
+                            {% endif %}
+
+                        </li>
+                        <li>
+                            <div class="load-grids">
+                                <div class="load-grid">
+                                    <p>Category</p>
+                                </div>
+                                <div class="load-grid">
+                                    <a href="#">Entertainment</a>
+                                </div>
+                                <div class="clearfix"> </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <div class="box">
+                    {{ form_start(form) }}
+                    {{ form_widget(form)}}
+                    {{ form_end(form) }}
+                </div>
+                {% else %}
+                    <p>Vous ne pouvez pas faire de commentaire car vous n'etes pas un utilisateur</p>
+            {% endif %}
+            <div class="all-comments">
+                <div class="media-grids">
+                    {% for i in coms %}
+                        <div class="media">
+                            <h5>{{i.author}}</h5>
+                            <div class="media-left">
+                                <a href="#">
+
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <p>{{ i.texte }}</p>
+                                <span>Post At :<a href="#"> {{i.dateC|date('d-m-Y H:i:s')}} </a></span>
+                                <a href="#"> supprimer </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            setInterval(function(){
+                $('.published');
+            },500);
+
+        });
+    </script>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{{asset('vendorA/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('vendorA/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{{ asset('vendorA/jquery-easing/jquery.easing.min.js')}}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ asset('jsA/sb-admin-2.min.js')}}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{{ asset('vendorA/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{ asset('vendorA/datatables/dataTables.bootstrap4.min.js')}}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{{ asset('jsA/demo/datatables-demo.js')}}"></script>
+{% endblock %}
+
+
